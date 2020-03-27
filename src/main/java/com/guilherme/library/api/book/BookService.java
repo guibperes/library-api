@@ -11,12 +11,18 @@ import com.guilherme.library.exceptions.errors.UserAlreadyBorrowedBookError;
 import com.guilherme.library.exceptions.errors.UserNotBorrowedBookError;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @TransactionalService
 public class BookService extends BaseService<Book, BookRepository> {
 
   @Autowired
   private LibraryUserService userService;
+
+  public Page<Book> search(String query, String category, Pageable pageable) {
+    return repo.search(query, category, pageable);
+  }
 
   public void reserve(UUID userId, UUID bookId) {
     LibraryUser user = userService.findById(userId);

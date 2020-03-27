@@ -7,11 +7,17 @@ import com.guilherme.library.auth.roles.annotations.RoleUser;
 import com.guilherme.library.base.BaseController;
 import com.guilherme.library.base.annotations.RestConfig;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.swagger.annotations.Api;
 
@@ -25,6 +31,27 @@ public class BookController extends BaseController<Book, BookRepository, BookSer
       .getContext()
       .getAuthentication()
       .getPrincipal();
+  }
+
+  @GetMapping
+  @RoleUser
+  public ResponseEntity<Page<Book>> search(
+    @RequestParam(defaultValue = "name") String sort,
+		@RequestParam(defaultValue = "asc") String order,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int limit,
+		@RequestParam(defaultValue = "%") String category,
+		@RequestParam(defaultValue = "%") String query
+  ) {
+    Pageable pageable = PageRequest.of(
+      page,
+      limit,
+      Sort.by(Sort.Direction.fromString(order), sort)
+    );
+
+    return ResponseEntity
+      .ok()
+      .body(service.search(query, category, pageable));
   }
 
   @PostMapping("/reserve/{id}")

@@ -2,7 +2,6 @@ package com.guilherme.library.base;
 
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,10 +57,6 @@ public abstract class BaseService<
     entity.setDeletedAt(LocalDateTime.now());
 
     repo.save(entity);
-  }
-
-  public List<ENTITY> findAll() {
-    return repo.findAll();
   }
 
   public ENTITY findById(UUID id) {

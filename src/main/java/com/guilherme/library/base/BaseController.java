@@ -1,6 +1,5 @@
 package com.guilherme.library.base;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -61,14 +60,6 @@ public abstract class BaseController<
     return ResponseEntity
       .ok()
       .build();
-  }
-
-  @GetMapping
-  @RoleUser
-  public ResponseEntity<List<ENTITY>> findAll() {
-    return ResponseEntity
-      .ok()
-      .body(service.findAll());
   }
 
   @GetMapping("/{id}")
